@@ -9,10 +9,17 @@ import { getPopularMovies } from "../services/movies/getPopularMovies";
 import { getNowPlayingMovies } from "@/services/movies/getNowPlaying";
 import cine from "../components/ui/cine.jpg";
 
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+}
+
 export default function Home() {
-  const [topRated, setTopRated] = useState<any[]>([]);
-  const [popularMovies, setPopularMovies] = useState<any[]>([]);
-  const [nowPlayingMovies, setNowPlayingMovies] = useState<any[]>([]);
+  const [topRated, setTopRated] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]);
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -31,11 +38,11 @@ export default function Home() {
   return (
     <main className="bg-black min-h-screen flex flex-col items-center justify-center px-6 py-20 text-white">
       <h1 className="text-5xl font-extrabold mb-6 text-red-600 drop-shadow-lg text-center">
-        Welcome to Alexis' Movie App
+        Welcome to Alexis&apos; Movie App
       </h1>
       <p className="text-lg max-w-xl text-center text-gray-300 mb-10">
         Discover, explore, and keep track of your favorite movies all in one place.
-        Browse popular titles, see what's now playing, and manage your own favorites list.
+        Browse popular titles, see what&apos;s now playing, and manage your own favorites list.
       </p>
 
       <div className="flex flex-wrap justify-center gap-6 mb-12">

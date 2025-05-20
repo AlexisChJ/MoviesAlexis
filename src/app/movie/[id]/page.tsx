@@ -93,7 +93,13 @@ const MovieDetailPage = () => {
     }
   };
 
-  const [recommended, setRecommended] = useState<any[]>([]);
+  interface IRecommendedMovie {
+    id: number;
+    title: string;
+    poster_path: string | null;
+  }
+  const [recommended, setRecommended] = useState<IRecommendedMovie[]>([]);
+
 
   useEffect(() => {
     if (!id || typeof id !== "string") return;

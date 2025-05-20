@@ -16,6 +16,6 @@ export const markAsFavorite = async (
             );
                 return data;
         } catch (error) {
-            
+            throw error;
         }
 };

@@ -4,13 +4,20 @@ import { useGuestSession } from "@/providers/GuestSessionContext";
 import { getFavoriteMovies } from "@/services/accounts/getFavoriteMovies";
 import { getMovieById } from "@/services/movies/getMovieById";
 import MovieList from "@/components/MovieList/MovieList";
+import { IMovieDetail } from "@/types/MovieDetails";
 
 const FAVORITES_STORAGE_KEY = "favoriteMovieIds";
 
 const MyFavoritesPage = () => {
+  interface Movie {
+    id: number;
+    title: string;
+    poster_path: string;
+    vote_average: number;
+  }
   const { guestSessionId } = useGuestSession();
   const [loading, setLoading] = useState<boolean>(false);
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<IMovieDetail[]>([]);
   const [isOfflineMode, setIsOfflineMode] = useState<boolean>(false);
 
   useEffect(() => {
@@ -106,6 +113,11 @@ const MyFavoritesPage = () => {
       {!loading && movies.length > 0 && (
         <div className="w-full max-w-6xl">
           <MovieList movies={movies} text="" loading={loading} />
+        </div>
+      )}
+      {isOfflineMode && (
+        <div className="text-yellow-400 text-sm mt-4">
+          You're viewing your favorites in offline mode.
         </div>
       )}
     </div>
