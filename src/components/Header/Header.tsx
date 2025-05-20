@@ -21,7 +21,7 @@ const Header = () => {
           href="/"
           className="text-2xl font-extrabold text-white tracking-tight hover:text-red-500 transition-colors duration-300"
         >
-          Alexis&apos Movies App
+          Alexis&apos; Movies App
         </Link>
 
         <nav className="flex flex-wrap gap-4 md:gap-6">

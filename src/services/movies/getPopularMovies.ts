@@ -1,17 +1,16 @@
 import api from "../api";
 
-export const getPopularMovies = async () => {
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    let res: any;
-    const endpoint = '/movie/popular?language=en-US';
-    await api
-    .get(endpoint)
-    .then((d) => {
-        res = d.data
-    })
-    .catch((err) => {
-        res = err.response;
-    });
+export const getPopularMovies = async (page: number = 1) => {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  let res: any;
+  const endpoint = `/movie/popular?language=en-US&page=${page}`;
+  
+  try {
+    const response = await api.get(endpoint);
+    res = response.data;
+  } catch (err: any) {
+    res = err.response;
+  }
 
-    return res;
+  return res;
 };

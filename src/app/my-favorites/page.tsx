@@ -117,7 +117,7 @@ const MyFavoritesPage = () => {
       )}
       {isOfflineMode && (
         <div className="text-yellow-400 text-sm mt-4">
-          You're viewing your favorites in offline mode.
+          Navigate throw the pages to select movies and add them to your favorites.
         </div>
       )}
     </div>
