@@ -9,12 +9,7 @@ import { IMovieDetail } from "@/types/MovieDetails";
 const FAVORITES_STORAGE_KEY = "favoriteMovieIds";
 
 const MyFavoritesPage = () => {
-  interface Movie {
-    id: number;
-    title: string;
-    poster_path: string;
-    vote_average: number;
-  }
+
   const { guestSessionId } = useGuestSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [movies, setMovies] = useState<IMovieDetail[]>([]);

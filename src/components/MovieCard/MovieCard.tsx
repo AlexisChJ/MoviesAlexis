@@ -1,6 +1,5 @@
 import Config from "@/config";
 import Image from "next/image";
-import { Poppins } from "next/font/google";
 
 
 interface IMovieCard {
