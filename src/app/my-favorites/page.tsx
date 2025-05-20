@@ -2,35 +2,91 @@
 import React, { useEffect, useState } from "react";
 import { useGuestSession } from "@/providers/GuestSessionContext";
 import { getFavoriteMovies } from "@/services/accounts/getFavoriteMovies";
+import { getMovieById } from "@/services/movies/getMovieById";
 import MovieList from "@/components/MovieList/MovieList";
+
+const FAVORITES_STORAGE_KEY = "favoriteMovieIds";
 
 const MyFavoritesPage = () => {
   const { guestSessionId } = useGuestSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [movies, setMovies] = useState<any[]>([]);
+  const [isOfflineMode, setIsOfflineMode] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (!guestSessionId) return;
       setLoading(true);
+      
       try {
-        const data = await getFavoriteMovies(guestSessionId);
-        setMovies(data?.results || []);
+        
+        if (guestSessionId) {
+          const data = await getFavoriteMovies(guestSessionId);
+          setMovies(data?.results || []);
+          setIsOfflineMode(false);
+        } 
+
+        else {
+          await fetchLocalFavorites();
+          setIsOfflineMode(true);
+        }
       } catch (err) {
         console.error("Error loading favorite movies:", err);
+
+        if (guestSessionId) {
+          await fetchLocalFavorites();
+          setIsOfflineMode(true);
+        }
       } finally {
         setLoading(false);
       }
     };
+
     fetchFavorites();
   }, [guestSessionId]);
+
+
+  const fetchLocalFavorites = async () => {
+    try {
+      
+      const storedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
+      const favoriteIds: number[] = storedFavorites ? JSON.parse(storedFavorites) : [];
+      
+      if (favoriteIds.length === 0) {
+        setMovies([]);
+        return;
+      }
+
+      
+      const moviePromises = favoriteIds.map(async (id) => {
+        try {
+          return await getMovieById(id.toString());
+        } catch (error) {
+          console.error(`Error fetching movie with ID ${id}:`, error);
+          return null;
+        }
+      });
+      const moviesData = await Promise.all(moviePromises);
+      const validMovies = moviesData.filter(movie => movie !== null).map(movie => ({
+        ...movie,
+        poster_path: movie.poster_path,
+        title: movie.title,
+        vote_average: movie.vote_average,
+        id: movie.id
+      }));
+
+      setMovies(validMovies);
+    } catch (error) {
+      console.error("Error loading favorites from localStorage:", error);
+      setMovies([]);
+    }
+  };
 
   return (
     <div className="bg-black min-h-screen px-6 py-10 text-black flex flex-col items-center">
       <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 text-center text-red-500 tracking-wide">
         My Favorite Movies
       </h1>
-
+    
       {loading && (
         <div className="flex justify-center items-center h-32">
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-red-600 border-opacity-50"></div>
